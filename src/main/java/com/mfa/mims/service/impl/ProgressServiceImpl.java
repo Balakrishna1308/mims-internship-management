@@ -3,6 +3,9 @@ package com.mfa.mims.service.impl;
 import com.mfa.mims.entity.Progress;
 import com.mfa.mims.repository.ProgressRepository;
 import com.mfa.mims.service.ProgressService;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,9 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Autowired
     private ProgressRepository progressRepository;
+
+
+    private static final Logger logger = LoggerFactory.getLogger(ProgressServiceImpl.class);
 
     @Async
     @Override
@@ -75,24 +81,43 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     @Async
-    public CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails) {
+    @Transactional
+    public CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails, int totalTasks, int completeTasks) {
+
+        //Adding logging for debugging
+        logger.info("Updating progress for id: {}", id);
+        logger.info("Progress details: {}", progressDetails);
+
+
         return CompletableFuture.supplyAsync(() -> {
             Optional<Progress> optionalProgress = progressRepository.findById(id);
             if (optionalProgress.isPresent()) {
                 Progress progress = optionalProgress.get();
+
+                //Setting the values from the progressDetails
                 progress.setTraineeId(progressDetails.getTraineeId());
                 progress.setTask(progressDetails.getTask());
-                progress.setCompletionPercentage(progressDetails.getCompletionPercentage());
+
+                //Calculate the progress percentage
+                double tasksProgressPercentage = calculateProgressPercentage(totalTasks, completeTasks);
+                progress.setCompletionPercentage(tasksProgressPercentage);
+
+                //Set the last updated time
                 progress.setLastUpdated(LocalDateTime.now()); // or use progressDetails.getLastUpdated()
+
+                //Log the calculated percentage
+                logger.info("Calculated completion percentage: {}", tasksProgressPercentage);
+
                 return progressRepository.save(progress);
             } else {
                 throw new IllegalArgumentException("Progress not found for id: " + id);
             }
-        });
+        }).exceptionally(ex->
+                {
+                    logger.error("Error updating progress percentage for id: {}", id, ex);
+                    throw new RuntimeException(ex);
+                });
     }
-
-
-
 
 
     @Override
@@ -101,4 +126,15 @@ public class ProgressServiceImpl implements ProgressService {
         return CompletableFuture.completedFuture(null);
         //Need to check the null from the above
     }
+
+    private double calculateProgressPercentage(int totalTasks, int completedTasks)
+    {
+        if (totalTasks==0)
+        throw new IllegalArgumentException("Total tasks cannot be zero");
+
+        double totalTasksInDouble = (double) totalTasks;
+        double completedTasksInDouble = (double) completedTasks;
+        return (completedTasksInDouble/totalTasksInDouble) * 100;
+    }
+
 }
