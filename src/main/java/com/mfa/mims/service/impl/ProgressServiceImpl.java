@@ -52,24 +52,47 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
 
-    @Async
+
+
+//    @Async
+//    @Override
+//    public CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails) {
+//
+//        return progressRepository.findById(id)
+//                .map(progress ->
+//                        {
+//                            progress.setTask(progressDetails.getTask());
+//                            progress.setLastUpdated(progressDetails.getLastUpdated());
+//                            progress.setCompletionPercentage(progressDetails.getCompletionPercentage());
+//                            return CompletableFuture.completedFuture(progressRepository.save(progress));
+//
+//                        }
+//                        ).orElseGet(()->CompletableFuture.completedFuture(null
+//                ));
+//        //Need to check the null from the above
+//
+//        }
+
     @Override
+    @Async
     public CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails) {
+        return CompletableFuture.supplyAsync(() -> {
+            Optional<Progress> optionalProgress = progressRepository.findById(id);
+            if (optionalProgress.isPresent()) {
+                Progress progress = optionalProgress.get();
+                progress.setTraineeId(progressDetails.getTraineeId());
+                progress.setTask(progressDetails.getTask());
+                progress.setCompletionPercentage(progressDetails.getCompletionPercentage());
+                progress.setLastUpdated(LocalDateTime.now()); // or use progressDetails.getLastUpdated()
+                return progressRepository.save(progress);
+            } else {
+                throw new IllegalArgumentException("Progress not found for id: " + id);
+            }
+        });
+    }
 
-        return progressRepository.findById(id)
-                .map(progress ->
-                        {
-                            progress.setTask(progressDetails.getTask());
-                            progress.setLastUpdated(progressDetails.getLastUpdated());
-                            progress.setCompletionPercentage(progressDetails.getCompletionPercentage());
-                            return CompletableFuture.completedFuture(progressRepository.save(progress));
 
-                        }
-                        ).orElseGet(()->CompletableFuture.completedFuture(null
-                ));
-        //Need to check the null from the above
 
-        }
 
 
     @Override

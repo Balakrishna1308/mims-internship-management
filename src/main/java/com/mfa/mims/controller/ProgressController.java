@@ -49,15 +49,24 @@ public class ProgressController{
         return progressService.createProgress(progress).thenApply(ResponseEntity::ok);
     }
 
+//    @PutMapping("/{id}")
+//    public CompletableFuture<ResponseEntity<Progress>> updateProgress(@PathVariable Long id, Progress progressDetails) {
+//        return progressService.updateProgress(id, progressDetails).thenApply(progress ->
+//        {
+//            if (progress == null)
+//                return ResponseEntity.notFound().build();
+//            else return ResponseEntity.ok(progress);
+//        });
+//    }
+
     @PutMapping("/{id}")
-    public CompletableFuture<ResponseEntity<Progress>> updateProgress(@PathVariable Long id, Progress progressDetails) {
-        return progressService.updateProgress(id, progressDetails).thenApply(progress ->
-        {
-            if (progress == null)
-                return ResponseEntity.notFound().build();
-            else return ResponseEntity.ok(progress);
-        });
+    public CompletableFuture<ResponseEntity<Progress>> updateProgress(@PathVariable Long id, @RequestBody Progress progressDetails) {
+        return progressService.updateProgress(id, progressDetails)
+                .thenApply(updatedProgress -> ResponseEntity.ok(updatedProgress))
+                .exceptionally(ex -> ResponseEntity.status(500).build());
     }
+
+
 
     @DeleteMapping("/{id}")
     public CompletableFuture<ResponseEntity<Void>> deleteProgress(@PathVariable Long id)
