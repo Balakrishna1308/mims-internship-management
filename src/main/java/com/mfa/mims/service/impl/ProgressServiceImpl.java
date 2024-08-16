@@ -198,6 +198,9 @@ public class ProgressServiceImpl implements ProgressService {
 //        return (completedTasksInDouble/totalTasksInDouble) * 100;
 //    }
 
+
+
+
     private double calculateProgressPercentage(float totalTasks, float completedTasks)
     {
         if (totalTasks==0)
