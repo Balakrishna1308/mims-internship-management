@@ -49,13 +49,22 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
 
+//    @Async
+//    @Override
+//    public CompletableFuture<Progress> createProgress(Progress progress) {
+//        progress.setLastUpdated(LocalDateTime.now());
+//        return CompletableFuture.completedFuture(progressRepository.save(progress));
+//
+//    }
+
     @Async
     @Override
     public CompletableFuture<Progress> createProgress(Progress progress) {
         progress.setLastUpdated(LocalDateTime.now());
+        progress.setCompletionPercentage(0.0);
         return CompletableFuture.completedFuture(progressRepository.save(progress));
-
     }
+
 
 
 
@@ -79,6 +88,48 @@ public class ProgressServiceImpl implements ProgressService {
 //
 //        }
 
+//    @Override
+//    @Async
+//    @Transactional
+//    public CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails, int totalTasks, int completeTasks) {
+//
+//        //Adding logging for debugging
+//        logger.info("Updating progress for id: {}", id);
+//        logger.info("Progress details: {}", progressDetails);
+//
+//
+//        return CompletableFuture.supplyAsync(() -> {
+//            Optional<Progress> optionalProgress = progressRepository.findById(id);
+//            if (optionalProgress.isPresent()) {
+//                Progress progress = optionalProgress.get();
+//
+//                //Setting the values from the progressDetails
+//                progress.setTraineeId(progressDetails.getTraineeId());
+//                progress.setTask(progressDetails.getTask());
+//
+//                //Calculate the progress percentage
+//                double tasksProgressPercentage = calculateProgressPercentage(totalTasks, completeTasks);
+//                progress.setCompletionPercentage(tasksProgressPercentage);
+//
+//                //Set the last updated time
+//                progress.setLastUpdated(LocalDateTime.now()); // or use progressDetails.getLastUpdated()
+//
+//                //Log the calculated percentage
+//                logger.info("Calculated completion percentage: {}", tasksProgressPercentage);
+//
+//                return progressRepository.save(progress);
+//            } else {
+//                throw new IllegalArgumentException("Progress not found for id: " + id);
+//            }
+//        }).exceptionally(ex->
+//                {
+//                    logger.error("Error updating progress percentage for id: {}", id, ex);
+//                    throw new RuntimeException(ex);
+//                });
+//    }
+
+
+
     @Override
     @Async
     @Transactional
@@ -94,30 +145,37 @@ public class ProgressServiceImpl implements ProgressService {
             if (optionalProgress.isPresent()) {
                 Progress progress = optionalProgress.get();
 
+                //Widening casting from int to float, then to double for progress percentage calculation
+                float totalTasksFloat =  totalTasks;
+                float completedTasksFloat = completeTasks;
+
+                double progressPercentage = calculateProgressPercentage(totalTasksFloat, completedTasksFloat);
+
                 //Setting the values from the progressDetails
                 progress.setTraineeId(progressDetails.getTraineeId());
                 progress.setTask(progressDetails.getTask());
-
-                //Calculate the progress percentage
-                double tasksProgressPercentage = calculateProgressPercentage(totalTasks, completeTasks);
-                progress.setCompletionPercentage(tasksProgressPercentage);
+                progress.setCompletionPercentage(progressPercentage);
 
                 //Set the last updated time
                 progress.setLastUpdated(LocalDateTime.now()); // or use progressDetails.getLastUpdated()
 
                 //Log the calculated percentage
-                logger.info("Calculated completion percentage: {}", tasksProgressPercentage);
+                logger.info("Calculated completion percentage: {}", progressPercentage);
 
                 return progressRepository.save(progress);
             } else {
                 throw new IllegalArgumentException("Progress not found for id: " + id);
             }
         }).exceptionally(ex->
-                {
-                    logger.error("Error updating progress percentage for id: {}", id, ex);
-                    throw new RuntimeException(ex);
-                });
+        {
+            logger.error("Error updating progress percentage for id: {}", id, ex);
+            throw new RuntimeException(ex);
+        });
     }
+
+
+
+
 
 
     @Override
@@ -127,14 +185,29 @@ public class ProgressServiceImpl implements ProgressService {
         //Need to check the null from the above
     }
 
-    private double calculateProgressPercentage(int totalTasks, int completedTasks)
+
+
+
+//    private double calculateProgressPercentage(int totalTasks, int completedTasks)
+//    {
+//        if (totalTasks==0)
+//        throw new IllegalArgumentException("Total tasks cannot be zero");
+//
+//        double totalTasksInDouble = (double) totalTasks;
+//        double completedTasksInDouble = (double) completedTasks;
+//        return (completedTasksInDouble/totalTasksInDouble) * 100;
+//    }
+
+    private double calculateProgressPercentage(float totalTasks, float completedTasks)
     {
         if (totalTasks==0)
-        throw new IllegalArgumentException("Total tasks cannot be zero");
+        {
+            return 0.0;
+        }
 
-        double totalTasksInDouble = (double) totalTasks;
-        double completedTasksInDouble = (double) completedTasks;
-        return (completedTasksInDouble/totalTasksInDouble) * 100;
+        //Calculate percentage with accurate double values
+        return (double) (completedTasks/totalTasks) * 100;
     }
+
 
 }

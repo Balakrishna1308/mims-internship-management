@@ -24,7 +24,8 @@ public class Progress {
     private String task;
 
     @Column(name = "completion_percentage", nullable = false)
-    private Double completionPercentage;
+//    private Double completionPercentage;
+    private Double completionPercentage = 0.0;
 
     @Column(name = "last_updated", nullable = false)
     private LocalDateTime lastUpdated;
