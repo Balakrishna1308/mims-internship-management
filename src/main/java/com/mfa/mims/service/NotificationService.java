@@ -5,6 +5,6 @@ import com.mfa.mims.entity.Notification;
 import java.util.concurrent.CompletableFuture;
 
 public interface NotificationService {
-    CompletableFuture<String> processNotificationMessage(String message);
+    CompletableFuture<String> processNotificationMessage(String message, boolean applyTransformation);
     CompletableFuture<Notification> saveNotification(Notification notification);
 }

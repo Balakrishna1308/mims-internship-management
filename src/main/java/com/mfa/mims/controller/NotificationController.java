@@ -15,9 +15,10 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    @GetMapping("/process")
-    public CompletableFuture<ResponseEntity<String>> processMessage(@RequestParam String message) {
-        return notificationService.processNotificationMessage(message)
+    @GetMapping("/transform")
+    public CompletableFuture<ResponseEntity<String>> processMessage
+            (@RequestParam String message, @RequestParam boolean applyTransformation ) {
+        return notificationService.processNotificationMessage(message, applyTransformation)
                 .thenApply(ResponseEntity::ok)
                 .exceptionally(ex -> ResponseEntity.status(500).build());
     }

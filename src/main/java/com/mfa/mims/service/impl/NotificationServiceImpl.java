@@ -20,7 +20,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Async
-    public CompletableFuture<String> processNotificationMessage(String message) {
+    public CompletableFuture<String> processNotificationMessage(String message, boolean applyTransformation) {
         // Same implementation as before for processing the message
         UnaryOperator<String> toUpperCase = String::toUpperCase;
         UnaryOperator<String> addPrefix = msg -> "IMPORTANT: " + msg;
@@ -28,7 +28,14 @@ public class NotificationServiceImpl implements NotificationService {
 
         //First, converting to upper case, then trimming, and adding prefix
         Function<String, String> toUpperTrimAndPrefix = toUpperCase.andThen(trimAndPrefix);
-        String transformedMessage = toUpperTrimAndPrefix.apply(message);
+
+        //For nothing to be transformed, use identity operator
+        UnaryOperator<String> identityOperator = UnaryOperator.identity();
+
+        //Choose the transformation based on the flag
+        Function<String, String> selectedOperator = applyTransformation ? toUpperTrimAndPrefix : identityOperator;
+
+        String transformedMessage = selectedOperator.apply(message);
 
         return CompletableFuture.completedFuture(transformedMessage);
     }
