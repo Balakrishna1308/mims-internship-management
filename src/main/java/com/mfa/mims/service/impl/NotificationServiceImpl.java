@@ -26,7 +26,10 @@ public class NotificationServiceImpl implements NotificationService {
         UnaryOperator<String> addPrefix = msg -> "IMPORTANT: " + msg;
         Function<String, String> trimAndPrefix = addPrefix.compose(String::trim);
 
-        String transformedMessage = trimAndPrefix.apply(message);
+        //First, converting to upper case, then trimming, and adding prefix
+        Function<String, String> toUpperTrimAndPrefix = toUpperCase.andThen(trimAndPrefix);
+        String transformedMessage = toUpperTrimAndPrefix.apply(message);
+
         return CompletableFuture.completedFuture(transformedMessage);
     }
 
