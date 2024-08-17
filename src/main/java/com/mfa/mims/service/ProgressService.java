@@ -18,4 +18,8 @@ public interface ProgressService {
     CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails, int totalTasks, int updatedTasks);
 
     CompletableFuture<Void> deleteProgress(Long id);
+
+//    CompletableFuture<Integer> getRoundedCompletionPercentage(Long id);
+    CompletableFuture<Progress> updateAndRoundCompletionPercentage(Long id);
+
 }

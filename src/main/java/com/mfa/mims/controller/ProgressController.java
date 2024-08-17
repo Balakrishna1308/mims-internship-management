@@ -89,4 +89,13 @@ public class ProgressController {
     {
         return progressService.deleteProgress(id).thenApply(v->ResponseEntity.noContent().build());
     }
-}
+
+
+    @PutMapping("/{id}/round-completion")
+    public CompletableFuture<ResponseEntity<Progress>> updateAndRoundCompletionPercentage(@PathVariable Long id) {
+        return progressService.updateAndRoundCompletionPercentage(id)
+                .thenApply(ResponseEntity::ok)
+                .exceptionally(ex -> ResponseEntity.status(500).build());
+    }
+  }
+
