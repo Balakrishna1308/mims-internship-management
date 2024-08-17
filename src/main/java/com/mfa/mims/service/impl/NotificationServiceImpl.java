@@ -19,7 +19,7 @@ public class NotificationServiceImpl implements NotificationService {
     private NotificationRepository notificationRepository;
 
     @Override
-    @Async
+    @Async("taskExecutor")
     public CompletableFuture<String> processNotificationMessage(String message, boolean applyTransformation) {
         // Same implementation as before for processing the message
         UnaryOperator<String> toUpperCase = String::toUpperCase;
@@ -37,7 +37,8 @@ public class NotificationServiceImpl implements NotificationService {
 
         String transformedMessage = selectedOperator.apply(message);
 
-        return CompletableFuture.completedFuture(transformedMessage);
+//      return CompletableFuture.completedFuture(transformedMessage);
+        return CompletableFuture.completedFuture("Processed: "+transformedMessage);
     }
 
     @Override
