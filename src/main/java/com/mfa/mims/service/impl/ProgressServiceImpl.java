@@ -1,9 +1,10 @@
 package com.mfa.mims.service.impl;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import com.mfa.mims.entity.Progress;
 import com.mfa.mims.repository.ProgressRepository;
 import com.mfa.mims.service.ProgressService;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class ProgressServiceImpl implements ProgressService {
     @Override
     public CompletableFuture<List<Progress>> getAllProgress() {
 
-       return CompletableFuture.completedFuture(progressRepository.findAll());
+        return CompletableFuture.completedFuture(progressRepository.findAll());
 
     }
 
@@ -64,9 +65,6 @@ public class ProgressServiceImpl implements ProgressService {
         progress.setCompletionPercentage(0.0);
         return CompletableFuture.completedFuture(progressRepository.save(progress));
     }
-
-
-
 
 
 //    @Async
@@ -129,7 +127,6 @@ public class ProgressServiceImpl implements ProgressService {
 //    }
 
 
-
     @Override
     @Async
     @Transactional
@@ -146,7 +143,7 @@ public class ProgressServiceImpl implements ProgressService {
                 Progress progress = optionalProgress.get();
 
                 //Widening casting from int to float, then to double for progress percentage calculation
-                float totalTasksFloat =  totalTasks;
+                float totalTasksFloat = totalTasks;
                 float completedTasksFloat = completeTasks;
 
                 double progressPercentage = calculateProgressPercentage(totalTasksFloat, completedTasksFloat);
@@ -166,16 +163,12 @@ public class ProgressServiceImpl implements ProgressService {
             } else {
                 throw new IllegalArgumentException("Progress not found for id: " + id);
             }
-        }).exceptionally(ex->
+        }).exceptionally(ex ->
         {
             logger.error("Error updating progress percentage for id: {}", id, ex);
             throw new RuntimeException(ex);
         });
     }
-
-
-
-
 
 
     @Override
@@ -184,6 +177,65 @@ public class ProgressServiceImpl implements ProgressService {
         return CompletableFuture.completedFuture(null);
         //Need to check the null from the above
     }
+
+
+
+
+    @Override
+    @Async
+    @Transactional
+    public CompletableFuture<Progress> updateAndRoundCompletionPercentage(Long id) {
+        return CompletableFuture.supplyAsync(() -> {
+            Optional<Progress> optionalProgress = progressRepository.findById(id);
+            if (optionalProgress.isPresent()) {
+                Progress progress= optionalProgress.get();
+
+                // Narrowing casting from double to int
+                double completionPercentage= progress.getCompletionPercentage();
+
+//                int roundedPercentage= (int) Math.round(completionPercentage);
+
+                // Round to two decimal places
+                double roundedPercentage= Math.round(completionPercentage * 100.0) / 100.0;
+
+
+
+                // Narrowing cast to int// Update the progress entity with the rounded value
+                progress.setCompletionPercentage((double) roundedPercentage);
+                // Save as double in the database
+                return progressRepository.save(progress); // Save the updated entity to the database
+            } else {
+                throw new IllegalArgumentException("Progress not found for id: " + id);
+            }
+        });
+    }
+
+
+
+
+
+
+//    @Override
+//    @Async
+//    @Transactional
+//    public CompletableFuture<Integer> getRoundedCompletionPercentage(Long id) {
+//        return CompletableFuture.supplyAsync(() -> {
+//            Optional<Progress> optionalProgress = progressRepository.findById(id);
+//            if (optionalProgress.isPresent()) {
+//                Progress progress= optionalProgress.get();
+//
+//                // Narrowing casting from double to int
+//                double completionPercentage= progress.getCompletionPercentage();
+//                int roundedPercentage= (int) Math.round(completionPercentage); // Narrowing cast to int
+//                return roundedPercentage;
+//            } else {
+//                throw new IllegalArgumentException("Progress not found for id: " + id);
+//            }
+//        });
+//    }
+
+
+
 
 
 
