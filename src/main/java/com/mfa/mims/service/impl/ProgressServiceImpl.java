@@ -62,7 +62,7 @@ public class ProgressServiceImpl implements ProgressService {
     @Override
     public CompletableFuture<Progress> createProgress(Progress progress) {
         progress.setLastUpdated(LocalDateTime.now());
-        progress.setCompletionPercentage(0.0);
+//        progress.setCompletionPercentage(0.0);
         return CompletableFuture.completedFuture(progressRepository.save(progress));
     }
 
