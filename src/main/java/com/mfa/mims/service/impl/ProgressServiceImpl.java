@@ -26,7 +26,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     private static final Logger logger = LoggerFactory.getLogger(ProgressServiceImpl.class);
 
-    @Async
+    @Async("taskExecutor")
     @Override
     public CompletableFuture<List<Progress>> getAllProgress() {
 
@@ -34,7 +34,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     }
 
-    @Async
+    @Async("taskExecutor")
     @Override
     public CompletableFuture<Optional<Progress>> getProgressById(Long id) {
         Optional<Progress> optionalProgress = progressRepository.findById(id);
@@ -42,7 +42,7 @@ public class ProgressServiceImpl implements ProgressService {
         return getProgressById;
     }
 
-    @Async
+    @Async("taskExecutor")
     @Override
     public CompletableFuture<List<Progress>> getProgressByTraineeId(String traineeId) {
 
@@ -58,7 +58,7 @@ public class ProgressServiceImpl implements ProgressService {
 //
 //    }
 
-    @Async
+    @Async("taskExecutor")
     @Override
     public CompletableFuture<Progress> createProgress(Progress progress) {
         progress.setLastUpdated(LocalDateTime.now());
@@ -128,7 +128,7 @@ public class ProgressServiceImpl implements ProgressService {
 
 
     @Override
-    @Async
+    @Async("taskExecutor")
     @Transactional
     public CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails, int totalTasks, int completeTasks) {
 
@@ -172,6 +172,7 @@ public class ProgressServiceImpl implements ProgressService {
 
 
     @Override
+    @Async("taskExecutor")
     public CompletableFuture<Void> deleteProgress(Long id) {
         progressRepository.deleteById(id);
         return CompletableFuture.completedFuture(null);
@@ -182,7 +183,7 @@ public class ProgressServiceImpl implements ProgressService {
 
 
     @Override
-    @Async
+    @Async("taskExecutor")
     @Transactional
     public CompletableFuture<Progress> updateAndRoundCompletionPercentage(Long id) {
         return CompletableFuture.supplyAsync(() -> {

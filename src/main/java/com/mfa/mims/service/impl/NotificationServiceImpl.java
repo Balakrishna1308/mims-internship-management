@@ -42,7 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    @Async
+    @Async("taskExecutor")
     public CompletableFuture<Notification> saveNotification(Notification notification) {
         notification.setTimestamp(LocalDateTime.now());
         return CompletableFuture.completedFuture(notificationRepository.save(notification));
