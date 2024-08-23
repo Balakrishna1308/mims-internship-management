@@ -18,9 +18,7 @@ public class TraineeJoiningDetailsController {
 
     @Autowired
     private TraineeJoiningDetailsService traineeJoiningDetailsService;
-    @Autowired
-    private TraineeJoiningDetailsRepository traineeJoiningDetailsRepository;
-
+    
     @PostMapping
     public ResponseEntity<TraineeJoiningDetails> createTraineeJoiningDetails(@RequestBody TraineeJoiningDetails traineeJoiningDetails)
     {
