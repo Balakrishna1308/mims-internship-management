@@ -3,8 +3,11 @@ package com.mfa.mims.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -33,4 +36,11 @@ public class TraineeJoiningDetails {
     @Column(name = "course_name", nullable = false)
     private String courseName;
 
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name ="updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
