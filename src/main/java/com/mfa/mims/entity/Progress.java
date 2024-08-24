@@ -3,6 +3,8 @@ package com.mfa.mims.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -27,7 +29,12 @@ public class Progress {
 //    private Double completionPercentage;
     private Double completionPercentage = 0.0;
 
-    @Column(name = "last_updated", nullable = false)
+    @Column(name = "last_updated")
+    @UpdateTimestamp
     private LocalDateTime lastUpdated;
+
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAT;
 
 }
