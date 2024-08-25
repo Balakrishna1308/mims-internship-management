@@ -12,6 +12,9 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
 
+
+
+
     @Bean(name = "taskExecutor")
     public Executor taskExecutor()
     {
@@ -22,6 +25,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setThreadNamePrefix("MIMS-Async-");
         executor.setWaitForTasksToCompleteOnShutdown(true);
         executor.setAwaitTerminationSeconds(30);
+
         executor.initialize();
         return executor;
     }
@@ -30,5 +34,6 @@ public class AsyncConfig implements AsyncConfigurer {
     public Executor getAsyncExecutor() {
         return taskExecutor();
     }
+
 
 }
