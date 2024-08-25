@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 public class ReportGenerationServiceImpl implements ReportGenerationService {
 
     @Override
-    @Async(value = "notificationTaskExecutor")
+    @Async(value = "taskExecutor")
 //    @Async
     public CompletableFuture<String> generateReport(String reportType) {
 
