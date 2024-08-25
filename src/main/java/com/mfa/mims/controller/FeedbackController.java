@@ -28,4 +28,11 @@ public class FeedbackController {
     {
         return ResponseEntity.ok(feedbackService.findDistinctCategories());
     }
+
+    @GetMapping("/average-rating")
+    public ResponseEntity<Integer> getAverageRating()
+    {
+        int averageRatingAsInt = feedbackService.getAverageRatingAsInt();
+        return ResponseEntity.ok(averageRatingAsInt);
+    }
 }

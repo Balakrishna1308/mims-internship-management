@@ -23,4 +23,24 @@ public class FeedbackServiceImpl implements FeedbackService {
     public List<String> findDistinctCategories() {
         return feedbackRepository.findDistinctCategories();
     }
+
+    @Override
+    public List<Feedback> getAllFeedbacks() {
+        return feedbackRepository.findAll();
+    }
+
+    @Override
+    public int getAverageRatingAsInt() {
+
+        float totalRating = 0;
+
+        List<Feedback> feedbacks = feedbackRepository.findAll();
+        for (Feedback feedback:feedbacks)
+        {
+            totalRating+= feedback.getRating();
+        }
+
+        float averageRating = totalRating/feedbacks.size();
+        return (int) averageRating;
+    }
 }

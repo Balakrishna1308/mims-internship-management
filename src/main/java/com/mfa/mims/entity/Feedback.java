@@ -20,4 +20,7 @@ public class Feedback {
     @Column(name = "message", nullable = false)
     private String message;
 
+    @Column(name = "rating", nullable = false)
+    private float rating;
+
 }
