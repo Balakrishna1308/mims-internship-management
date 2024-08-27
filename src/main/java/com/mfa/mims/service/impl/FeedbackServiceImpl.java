@@ -42,5 +42,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         float averageRating = totalRating/feedbacks.size();
         return (int) averageRating;
+
     }
+
 }

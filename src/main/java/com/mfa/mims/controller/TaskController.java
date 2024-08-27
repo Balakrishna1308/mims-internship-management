@@ -42,4 +42,12 @@ public class TaskController {
         float timeSpentAsFloat = taskService.getTaskTimeSpentAsFloat(id);
         return ResponseEntity.ok(timeSpentAsFloat);
     }
+
+    @GetMapping("/{id}/priorityAsByte")
+    public ResponseEntity<Byte> getTAskPriorityAsByte(@PathVariable  Long id)
+    {
+        byte taskPriorityAsByte = taskService.getTaskPriorityAsByte(id);
+        return ResponseEntity.ok(taskPriorityAsByte);
+    }
+
 }

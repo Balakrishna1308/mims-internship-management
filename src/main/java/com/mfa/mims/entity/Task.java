@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "task")
-@Data
-@NoArgsConstructor
+//@Data
+//@NoArgsConstructor
 public class Task {
 
     @Id
@@ -17,6 +17,43 @@ public class Task {
     private byte statusCode;
     private short priorityLevel;
     private int timeSpent;
+
+    @Column(name = "task_name", nullable = false)
+    private String taskName;
+
+    @Column(name = "priority_char", nullable = false)
+    private char priorityChar;
+
+    @Transient
+    private byte priorityAsByte;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public char getPriorityChar() {
+        return priorityChar;
+    }
+
+    public void setPriorityChar(char priorityChar) {
+        this.priorityChar = priorityChar;
+    }
+
+
+
 
     //Widening type casting
     public char getStatusAsChar()
@@ -34,4 +71,28 @@ public class Task {
         return (float) timeSpent;
     }
 
+
+
+
+    //Narrowing type casting
+
+    public byte getPriorityAsByte()
+    {
+        return (byte) priorityChar;
+    }
+
+
+
+    public void setStatusCode(byte statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public void setPriorityLevel(short priorityLevel) {
+        this.priorityLevel = priorityLevel;
+    }
+
+
+    public void setTimeSpent(int timeSpent) {
+        this.timeSpent = timeSpent;
+    }
 }
