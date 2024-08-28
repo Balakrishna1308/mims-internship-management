@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/feedback")
@@ -35,4 +36,5 @@ public class FeedbackController {
         int averageRatingAsInt = feedbackService.getAverageRatingAsInt();
         return ResponseEntity.ok(averageRatingAsInt);
     }
+
 }

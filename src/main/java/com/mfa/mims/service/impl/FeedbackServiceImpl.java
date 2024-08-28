@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
@@ -32,12 +33,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public int getAverageRatingAsInt() {
 
-        float totalRating = 0;
+        float totalRating = 0.0f;
 
         List<Feedback> feedbacks = feedbackRepository.findAll();
         for (Feedback feedback:feedbacks)
         {
-            totalRating+= feedback.getRating();
+            totalRating = totalRating + feedback.getRating();
         }
 
         float averageRating = totalRating/feedbacks.size();
