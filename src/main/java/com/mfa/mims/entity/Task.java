@@ -6,13 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "task")
-//@Data
-//@NoArgsConstructor
+@NoArgsConstructor
 public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+
 
     private byte statusCode;
     private short priorityLevel;
@@ -21,12 +23,27 @@ public class Task {
     @Column(name = "task_name", nullable = false)
     private String taskName;
 
+    @Column(name = "task_description", nullable = false)
+    private String taskDescription;
+
     @Column(name = "priority_char", nullable = false)
     private char priorityChar;
 
     @Transient
     private byte priorityAsByte;
 
+    public Task(String taskName, String taskDescription) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+    }
+
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
+    }
 
     public Long getId() {
         return id;
