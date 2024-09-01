@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -47,5 +48,10 @@ public class TaskServiceImpl implements TaskService {
     public byte getTaskPriorityAsByte(Long taskId) {
         Task task = taskRepository.findById(taskId).orElseThrow(()->new RuntimeException("Task not found"));
         return task.getPriorityAsByte();
+    }
+
+    @Override
+    public Optional<Task> getTaskById(Long id) {
+        return taskRepository.findById(id);
     }
 }
