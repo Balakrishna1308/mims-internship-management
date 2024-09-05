@@ -9,4 +9,7 @@ public interface EventService {
 
     short getEventCodeAsShort(Long eventId);
     Event createEvent(Event event);
+
+    List<Event> getUpcomingEvents();
+    String generateUpcomingEventsSummary();
 }

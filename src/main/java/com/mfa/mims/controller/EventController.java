@@ -34,4 +34,19 @@ public class EventController {
         short eventCodeAsShort = eventService.getEventCodeAsShort(id);
         return ResponseEntity.ok(eventCodeAsShort);
     }
+
+    //Get upcoming events
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Event>> getUpcomingEvents()
+    {
+        List<Event> upcomingEvents = eventService.getUpcomingEvents();
+        return ResponseEntity.ok(upcomingEvents);
+    }
+
+    @GetMapping("/event-summary")
+    public ResponseEntity<String> generateUpcomingEventsSummary()
+    {
+        String upcomingEventsSummary = eventService.generateUpcomingEventsSummary();
+        return ResponseEntity.ok(upcomingEventsSummary);
+    }
 }
