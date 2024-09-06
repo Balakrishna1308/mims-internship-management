@@ -76,7 +76,7 @@ public class ProgressController {
                 {
                     logger.error("Error in controller for updating progress for id: {}", id, ex);
 
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                      return ResponseEntity.notFound().build();
                 });
 
     }
