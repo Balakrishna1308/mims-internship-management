@@ -12,9 +12,6 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
 
-
-
-
     @Bean(name = "taskExecutor")
     public Executor taskExecutor()
     {
