@@ -22,4 +22,7 @@ public interface ProgressService {
 //    CompletableFuture<Integer> getRoundedCompletionPercentage(Long id);
     CompletableFuture<Progress> updateAndRoundCompletionPercentage(Long id);
 
+    //Method to check for existing traineeId
+    CompletableFuture<Boolean> doesTraineeIdExist(String traineeId);
+
 }

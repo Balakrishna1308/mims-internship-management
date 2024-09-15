@@ -48,7 +48,16 @@ public class ProgressController {
 
     @PostMapping
     public CompletableFuture<ResponseEntity<Progress>> createProgress(@RequestBody Progress progress) {
-        return progressService.createProgress(progress).thenApply(ResponseEntity::ok);
+//        return progressService.createProgress(progress).thenApply(ResponseEntity::ok);
+      return progressService.doesTraineeIdExist(progress.getTraineeId())
+              .thenCompose(exists->
+              {
+                  if(exists)
+                   return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.CONFLICT).build());
+                  else {
+                  return progressService.createProgress(progress).thenApply(ResponseEntity::ok);
+                  }
+              });
     }
 
 //    @PutMapping("/{id}")

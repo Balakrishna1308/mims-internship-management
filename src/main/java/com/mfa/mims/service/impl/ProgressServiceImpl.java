@@ -215,9 +215,12 @@ public class ProgressServiceImpl implements ProgressService {
         });
     }
 
-
-
-
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Boolean> doesTraineeIdExist(String traineeId) {
+        Optional<Progress> existingProgress = progressRepository.findFirstByTraineeId(traineeId);
+        return CompletableFuture.completedFuture(existingProgress.isPresent());
+    }
 
 
 //    @Override
