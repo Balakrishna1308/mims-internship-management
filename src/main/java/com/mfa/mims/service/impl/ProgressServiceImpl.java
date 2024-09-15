@@ -175,8 +175,10 @@ public class ProgressServiceImpl implements ProgressService {
     @Async("taskExecutor")
     public CompletableFuture<Boolean> deleteProgress(Long id) {
         Optional<Progress> optionalProgress = progressRepository.findById(id);
-        if (optionalProgress.isPresent())
+        if (optionalProgress.isPresent()) {
+            progressRepository.deleteById(id);
             return CompletableFuture.completedFuture(true);
+        }
         else
             return CompletableFuture.completedFuture(false);
     }
