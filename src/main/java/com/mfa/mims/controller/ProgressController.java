@@ -71,7 +71,8 @@ public class ProgressController {
 //    }
 
     @PutMapping("/{id}")
-    public CompletableFuture<ResponseEntity<Progress>> updateProgress(@PathVariable Long id, @RequestBody Progress progressDetails, @RequestParam int totalTasks, @RequestParam int completedTasks) {
+    public CompletableFuture<ResponseEntity<Progress>> updateProgress(@PathVariable Long id,
+        @RequestBody Progress progressDetails, @RequestParam int totalTasks, @RequestParam int completedTasks) {
         //Adding logging for debugging
         logger.info("Received request for updating the progress with id: {}", id);
         logger.info("Progress details from request: {}", progressDetails);
