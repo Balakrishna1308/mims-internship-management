@@ -87,7 +87,13 @@ public class ProgressController {
     @DeleteMapping("/{id}")
     public CompletableFuture<ResponseEntity<Void>> deleteProgress(@PathVariable Long id)
     {
-        return progressService.deleteProgress(id).thenApply(v->ResponseEntity.noContent().build());
+        return progressService.deleteProgress(id).thenApply(result->
+            {
+                if(!result)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                else
+                return   ResponseEntity.noContent().build();
+            });
     }
 
 
