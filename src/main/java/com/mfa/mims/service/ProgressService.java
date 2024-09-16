@@ -15,7 +15,7 @@ public interface ProgressService {
 
     CompletableFuture<Progress> createProgress(Progress progress);
 
-    CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails, int totalTasks, int updatedTasks);
+    CompletableFuture<Progress> updateProgress(Long id, Progress progressDetails, Integer totalTasks, Integer completedTasks);
 
     CompletableFuture<Boolean> deleteProgress(Long id);
 

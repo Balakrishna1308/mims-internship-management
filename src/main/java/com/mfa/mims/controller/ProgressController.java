@@ -70,27 +70,58 @@ public class ProgressController {
 //        });
 //    }
 
+
+
+
+
+//    @PutMapping("/{id}")
+//    public CompletableFuture<ResponseEntity<Progress>> updateProgress(@PathVariable Long id,
+//        @RequestBody Progress progressDetails, @RequestParam int totalTasks,
+//        @RequestParam int completedTasks) {
+//        //Adding logging for debugging
+//        logger.info("Received request for updating the progress with id: {}", id);
+//        logger.info("Progress details from request: {}", progressDetails);
+//
+////        return progressService.updateProgress(id, progressDetails, totalTasks, completedTasks)
+////                .thenApply(updatedProgress -> ResponseEntity.ok(updatedProgress))
+////                .exceptionally(ex -> ResponseEntity.status(500).build());
+//            return progressService.updateProgress(id, progressDetails, totalTasks, completedTasks)
+//                .thenApply(ResponseEntity::ok)
+//                .exceptionally(ex ->
+//                {
+//                    logger.error("Error in controller for updating progress for id: {}", id, ex);
+//
+//                      return ResponseEntity.notFound().build();
+//                });
+//
+//    }
+
+
+
+
     @PutMapping("/{id}")
-    public CompletableFuture<ResponseEntity<Progress>> updateProgress(@PathVariable Long id,
-        @RequestBody Progress progressDetails, @RequestParam int totalTasks, @RequestParam int completedTasks) {
-        //Adding logging for debugging
-        logger.info("Received request for updating the progress with id: {}", id);
-        logger.info("Progress details from request: {}", progressDetails);
+    public CompletableFuture<ResponseEntity<Progress>> updateProgress(
+            @PathVariable Long id,
+            @RequestBody Progress progressDetails,
+            @RequestParam(required = false) Integer totalTasks,
+            @RequestParam(required = false) Integer completedTasks
+    )
+    {
+        //Ensure either task or progress parameters are provided
+        if (totalTasks==null && completedTasks==null &&
+           (progressDetails.getTask()==null||progressDetails.getTask().isEmpty()))
+        {
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+        }
 
-//        return progressService.updateProgress(id, progressDetails, totalTasks, completedTasks)
-//                .thenApply(updatedProgress -> ResponseEntity.ok(updatedProgress))
-//                .exceptionally(ex -> ResponseEntity.status(500).build());
-            return progressService.updateProgress(id, progressDetails, totalTasks, completedTasks)
+        return progressService.updateProgress(id, progressDetails, totalTasks, completedTasks)
                 .thenApply(ResponseEntity::ok)
-                .exceptionally(ex ->
+                .exceptionally(ex->
                 {
-                    logger.error("Error in controller for updating progress for id: {}", id, ex);
-
-                      return ResponseEntity.notFound().build();
+                    logger.error("Error in controller for updating progress with id: {}", id, ex);
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
                 });
-
     }
-
 
 
 
