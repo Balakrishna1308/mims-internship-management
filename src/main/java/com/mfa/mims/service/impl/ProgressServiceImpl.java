@@ -1,4 +1,5 @@
 package com.mfa.mims.service.impl;
+import com.mfa.mims.exception.ProgressNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -107,7 +108,7 @@ public class ProgressServiceImpl implements ProgressService {
                     }
                     else
                     {
-                        throw new IllegalArgumentException("Progress with ID "+id+" not found");
+                        throw new ProgressNotFoundException("Progress with ID "+id+" not found");
                     }
 
                 }
@@ -278,7 +279,7 @@ public class ProgressServiceImpl implements ProgressService {
                 // Save as double in the database
                 return progressRepository.save(progress); // Save the updated entity to the database
             } else {
-                throw new IllegalArgumentException("Progress not found for id: " + id);
+                throw new ProgressNotFoundException("Progress not found with id: " + id);
             }
         });
     }

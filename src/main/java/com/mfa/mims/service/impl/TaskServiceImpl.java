@@ -1,6 +1,7 @@
 package com.mfa.mims.service.impl;
 
 import com.mfa.mims.entity.Task;
+import com.mfa.mims.exception.TaskNotFoundException;
 import com.mfa.mims.repository.TaskRepository;
 import com.mfa.mims.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public String getTaskStatusCodeAsChar(Long taskId) {
-        Task task = taskRepository.findById(taskId).orElseThrow(()-> new RuntimeException("Task not found"));
+        Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException("Task not found with ID: "+taskId));
         return String.valueOf(task.getStatusAsChar());
     }
 
     @Override
     public String getTaskPriorityLevelAsChar(Long taskId) {
-       Task task = taskRepository.findById(taskId).orElseThrow(()-> new RuntimeException("Task not found"));
+       Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException("Task not found with ID: "+taskId));
        return String.valueOf(task.getPriorityAsChar());
     }
 
     @Override
     public float getTaskTimeSpentAsFloat(Long taskId) {
-        Task task = taskRepository.findById(taskId).orElseThrow(()-> new RuntimeException(("Task not found")));
+        Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException(("Task not found with ID: "+taskId)));
         return task.getTimeSpentAsFloat();
     }
 
@@ -46,7 +47,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public byte getTaskPriorityAsByte(Long taskId) {
-        Task task = taskRepository.findById(taskId).orElseThrow(()->new RuntimeException("Task not found"));
+        Task task = taskRepository.findById(taskId).orElseThrow(()->new TaskNotFoundException("Task not found with ID: "+taskId));
         return task.getPriorityAsByte();
     }
 

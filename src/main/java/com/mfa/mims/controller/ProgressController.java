@@ -1,6 +1,7 @@
 package com.mfa.mims.controller;
 
 import com.mfa.mims.entity.Progress;
+import com.mfa.mims.exception.ProgressNotFoundException;
 import com.mfa.mims.service.ProgressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,7 +143,7 @@ public class ProgressController {
     public CompletableFuture<ResponseEntity<Progress>> updateAndRoundCompletionPercentage(@PathVariable Long id) {
         return progressService.updateAndRoundCompletionPercentage(id)
                 .thenApply(ResponseEntity::ok)
-                .exceptionally(ex -> ResponseEntity.status(500).build());
+                .exceptionally(ex -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
   }
 

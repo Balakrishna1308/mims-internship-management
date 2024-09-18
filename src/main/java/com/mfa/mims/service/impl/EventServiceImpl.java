@@ -1,6 +1,7 @@
 package com.mfa.mims.service.impl;
 
 import com.mfa.mims.entity.Event;
+import com.mfa.mims.exception.EventNotFoundException;
 import com.mfa.mims.repository.EventRepository;
 import com.mfa.mims.service.EventService;
 import com.mfa.mims.utils.UpcomingEventsSupplier;
@@ -22,7 +23,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public short getEventCodeAsShort(Long eventId) {
-        Event event = eventRepository.findById(eventId).orElseThrow(()-> new RuntimeException("Event not found."));
+        Event event = eventRepository.findById(eventId).orElseThrow(()-> new EventNotFoundException("Event not found" +
+                " for the id: " + eventId));
         return event.getEventCodeAsShort();
 
     }
