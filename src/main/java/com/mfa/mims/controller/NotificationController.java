@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/api/notifications")
@@ -29,11 +31,28 @@ public class NotificationController {
                 .exceptionally(ex -> ResponseEntity.status(500).build());
     }
 
+//    @PostMapping("/create")
+//    public CompletableFuture<ResponseEntity<Notification>> createNotification(@RequestBody Notification notification) {
+//        return notificationService.saveNotification(notification)
+//                .thenApply(ResponseEntity::ok)
+//                .exceptionally(ex -> ResponseEntity.status(500).build());
+//    }
+
     @PostMapping("/create")
-    public CompletableFuture<ResponseEntity<Notification>> createNotification(@RequestBody Notification notification) {
+    public CompletableFuture<ResponseEntity<String>> createNotification(@RequestBody Notification notification) {
         return notificationService.saveNotification(notification)
-                .thenApply(ResponseEntity::ok)
-                .exceptionally(ex -> ResponseEntity.status(500).build());
+                .thenApply(addedSuccessfully->
+                {
+                    if (addedSuccessfully)
+                    {
+                       return ResponseEntity.status(HttpStatus.CREATED).body("Notification has been created successfully");
+                    }
+                    else
+                    {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create notification");
+                    }
+
+                });
     }
 
     @PostMapping("/createAll")
@@ -51,5 +70,13 @@ public class NotificationController {
             }
 
         });
+    }
+
+    @GetMapping
+    public CompletableFuture<List<Notification>> getAllNotifications()
+    {
+         return notificationService
+                .getAllNotifications()
+                 .thenApply(Function.identity());
     }
 }
