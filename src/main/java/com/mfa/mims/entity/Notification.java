@@ -3,6 +3,7 @@ package com.mfa.mims.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -23,5 +24,6 @@ public class Notification {
     private String message;
 
     @Column(name = "timestamp")
+    @CreationTimestamp
     private LocalDateTime timestamp;
 }

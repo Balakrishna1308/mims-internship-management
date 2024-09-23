@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -44,7 +45,14 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Async("taskExecutor")
     public CompletableFuture<Notification> saveNotification(Notification notification) {
-        notification.setTimestamp(LocalDateTime.now());
+//        notification.setTimestamp(LocalDateTime.now());
         return CompletableFuture.completedFuture(notificationRepository.save(notification));
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Boolean> saveAllNotifications(Collection<? extends Notification> notifications) {
+        notificationRepository.saveAll(notifications);
+        return CompletableFuture.completedFuture(true);
     }
 }
