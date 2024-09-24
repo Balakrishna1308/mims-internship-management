@@ -77,7 +77,7 @@ public class FileController {
                             if(success)
                             {
                                 System.out.println("File upload success");
-                                return ResponseEntity.ok("File uploaded successfully");
+                                return ResponseEntity.ok("File uploaded successfully..");
                             }
                             else
                             {
