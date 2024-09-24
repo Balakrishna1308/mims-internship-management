@@ -26,7 +26,7 @@ public class FileServiceImpl implements FileService {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 // Check file size (5MB limit)
-                if (file.getSize() > 5_000_000) {
+                if (file.getSize() > 1_000_000) {
                     throw new FileStorageException("File size exceeds the limit...");
                 }
 
