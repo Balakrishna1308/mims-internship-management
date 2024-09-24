@@ -85,7 +85,7 @@ public class FileServiceImpl implements FileService {
             try {
                 // Check file size (5MB limit)
                 if (file.getSize() > 5_000_000) {
-                    throw new FileStorageException("File size exceeds the limit");
+                    throw new FileStorageException("File size exceeds the limit...");
                 }
 
                 // Get file data
@@ -104,7 +104,7 @@ public class FileServiceImpl implements FileService {
                 System.out.println("File uploaded and saved to database successfully: " + file.getOriginalFilename());
                 return true;
             } catch (IOException ioException) {
-                throw new FileStorageException("File upload failed: " + file.getOriginalFilename(), ioException);
+                throw new FileStorageException("File upload failed. " + file.getOriginalFilename(), ioException);
             }
         }).exceptionally(exception -> {
             System.err.println("Error uploading the file: " + exception.getMessage());

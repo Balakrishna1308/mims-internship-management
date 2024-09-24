@@ -94,7 +94,7 @@ public class FileController {
                 if (success) {
                     System.out.println("File upload success");
                 } else {
-                    System.out.println("File upload failed");
+                    System.out.println("File upload failed..");
                 }
             });
 
@@ -102,7 +102,7 @@ public class FileController {
 
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("File upload failed: " + exception.getMessage());
+                    .body("File upload failed... " + exception.getMessage());
         }
     }
 }
